@@ -1,0 +1,220 @@
+// Step 1 - Define the constant values.
+const aadTenant = 'https://login.microsoftonline.com/';
+const aadTenantId = '1ed38c46-5933-4072-9caf-1e9b956330b9';
+
+const appId = 'a8c9fa18-b3be-47dd-bb80-7eac4fb91fd1';
+const appSecret = 'BW~8Q~0WKd4n9nN.M5HQ9C2BGMMNPmzOK5Ujfbtl';
+
+const fhirEndpoint = 'https://fihrworkspace-fiap-challange-fhir.fhir.azurehealthcareapis.com/';
+
+// Define a function to get HTTP headers with access token.
+function getHttpHeader(accessToken) {
+  return {
+    Authorization: 'Bearer ' + accessToken,
+    'Content-type': 'application/json',
+  };
+}
+
+// Define a function to print resource data.
+function printResourceData(resource) {
+  const resourceType = resource['resourceType'];
+  const itemId = resource['id'];
+  if (resourceType === 'OperationOutcome') {
+    console.log('\t' + JSON.stringify(resource));
+  } else {
+    console.log('\t' + resourceType + '/' + itemId);
+  }
+}
+
+// Define a function to print response results.
+function printResponseResults(response) {
+  const responseAsJson = response.data;
+
+  if (!responseAsJson.entry) {
+    printResourceData(responseAsJson);
+  } else {
+    for (const item of responseAsJson.entry) {
+      const resource = item['resource'];
+      printResourceData(resource);
+    }
+  }
+}
+
+// Define a function to get an authentication token.
+async function getAuthToken() {
+  try {
+    const response = await axios.post(
+      aadTenant + aadTenantId + '/oauth2/token',
+      new URLSearchParams({
+        client_id: appId,
+        client_secret: appSecret,
+        grant_type: 'client_credentials',
+        resource: fhirEndpoint,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
+    const accessToken = response.data.access_token;
+    console.log('\tAAD Access Token acquired: ' + accessToken.substring(0, 50) + '...');
+    return accessToken;
+  } catch (error) {
+    console.error(error.response.data);
+    console.error('\tError getting token: ' + error.response.status);
+    return null;
+  }
+}
+
+// Define a function to post a Patient.
+async function postPatient(accessToken) {
+  const patientData = {
+    resourceType: 'Patient',
+    active: true,
+    name: [
+      {
+        use: 'official',
+        family: 'LastName',
+        given: ['FirstName', 'MiddleName'],
+      },
+    ],
+    // Add the rest of the patient data here
+  };
+
+  try {
+    const response = await axios.post(fhirEndpoint + 'Patient', patientData, {
+      headers: getHttpHeader(accessToken),
+    });
+    const resourceId = response.data.id;
+    console.log('\tPatient ingested: ' + resourceId + '. HTTP ' + response.status);
+    return resourceId;
+  } catch (error) {
+    console.error('\tError persisting patient: ' + error.response.status);
+    return null;
+  }
+}
+
+// Define a function to post a Practitioner.
+async function postPractitioner(accessToken) {
+  const practitionerData = {
+    resourceType: 'Practitioner',
+    active: true,
+    name: [
+      {
+        family: 'Smith',
+        given: ['John'],
+      },
+    ],
+    // Add the rest of the practitioner data here
+  };
+
+  try {
+    const response = await axios.post(fhirEndpoint + 'Practitioner', practitionerData, {
+      headers: getHttpHeader(accessToken),
+    });
+    const resourceId = response.data.id;
+    console.log('\tPractitioner ingested: ' + resourceId + '. HTTP ' + response.status);
+    return resourceId;
+  } catch (error) {
+    console.error('\tError persisting practitioner: ' + error.response.status);
+    return null;
+  }
+}
+
+// Define a function to post an Appointment.
+async function postAppointment(patientId, practitionerId, accessToken) {
+  const appointmentData = {
+    resourceType: 'Appointment',
+    status: 'booked',
+    description: 'Follow-up appointment with Dr. Smith',
+    // Add the rest of the appointment data here
+  };
+
+  try {
+    const response = await axios.post(fhirEndpoint + 'Appointment', appointmentData, {
+      headers: getHttpHeader(accessToken),
+    });
+    const resourceId = response.data.id;
+    console.log('\tAppointment ingested: ' + resourceId + '. HTTP ' + response.status);
+    return resourceId;
+  } catch (error) {
+    console.error('\tError persisting appointment: ' + error.response.status);
+    return null;
+  }
+}
+
+// Define a function to print patient information.
+async function printPatientInfo(patientId, accessToken) {
+  const baseUrl = fhirEndpoint + 'Patient/' + patientId;
+
+  try {
+    const response = await axios.get(baseUrl, {
+      headers: getHttpHeader(accessToken),
+    });
+    printResponseResults(response);
+  } catch (error) {
+    console.error('\tError getting patient data: ' + error.response.status);
+  }
+}
+
+// Define a function to print all appointments assigned to a Patient.
+async function printAllAppointmentsAssignedToPatient(patientId, accessToken) {
+  const baseUrl = fhirEndpoint + 'Appointment';
+  const queryParams = { actor: 'Patient/' + patientId };
+
+  try {
+    const response = await axios.get(baseUrl, {
+      params: queryParams,
+      headers: getHttpHeader(accessToken),
+    });
+    printResponseResults(response);
+  } catch (error) {
+    console.error('\tError getting appointments: ' + error.response.status);
+  }
+}
+
+// Main function
+(async () => {
+  // Step 2 - Acquire authentication token
+  console.log('Acquire authentication token for secure communication.');
+  const accessToken = await getAuthToken();
+  if (!accessToken) {
+    return;
+  }
+
+  // Step 3 - Insert Patient
+  console.log('Persist Patient data.');
+  const patientId = await postPatient(accessToken);
+  if (!patientId) {
+    return;
+  }
+
+  // Step 4 - Insert Practitioner (Doctor)
+  console.log('Persist Practitioner data.');
+  const practitionerId = await postPractitioner(accessToken);
+  if (!practitionerId) {
+    return;
+  }
+
+  // Step 5 - Insert Appointments
+  console.log('Insert multiple appointments using Patient and Practitioner IDs.');
+  const appointmentId1 = await postAppointment(patientId, practitionerId, accessToken);
+  if (!appointmentId1) {
+    return;
+  }
+
+  const appointmentId2 = await postAppointment(patientId, practitionerId, accessToken);
+  if (!appointmentId2) {
+    return;
+  }
+
+  const appointmentId3 = await postAppointment(patientId, practitionerId, accessToken);
+  if (!appointmentId3) {
+    return;
+  }
+
+  // Step 6 - Print Patient info
+  console.log("Query Patient's data.");
+  await printPatientInfo(patientId)
+})
