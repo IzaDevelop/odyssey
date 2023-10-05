@@ -1,9 +1,13 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { CaretLeft } from "@phosphor-icons/react";
 import { useAppContext } from "../../context/AppContext";
-import { Email } from "../../components/form/Email";
-import { Password } from "../../components/form/Password";
+import { Text } from "../../components/form/Text";
+import { Phone } from "../../components/form/Phone";
+import { Radio } from "../../components/form/Radio";
+import { Date } from "../../components/form/Date";
+import { Zip } from "../../components/form/Zip";
 import { Button } from "../../components/form/Button";
 import { Modal } from "../../components/Modal";
 
@@ -11,95 +15,27 @@ export function Register() {
     const { handleCreateParticipant, modal } = useAppContext()
 
     const [fields, setFields] = useState({
-        cnpj: "",
-        company: "",
-        representative: "",
-        branch: "",
-        email: "",
-        cpf: "",
-        password: "",
-        confirmPassword: "",
-        status: "",
-        conditions: false,
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        phone: "",
+        gender: "",
+        birth: "",
+        street: "",
+        complement: "",
+        city: "",
+        district: "",
+        state: "",
+        zip: "",
     });
 
-    const [currentData, setCurrentData] = useState({});
-    const [disable, setDisable] = useState(false);
     const [validation, setValidation] = useState(false)
     const [loadingValidation, setLoadingValidation] = useState(false)
-    const [extraValidation, setExtraValidation] = useState(true)
-    const [conditionsPassword, setConditionsPassword] = useState({
-        lowerCase: false,
-        upperCase: false,
-        digit: false,
-        specialChar: false,
-        minLength: false,
-    });
-    const [totalValidated, setTotalValidated] = useState(0);
-
-    function handleValidationPassword() {
-        const lowerCase = new RegExp("(?=.*[a-z])");
-        const upperCase = new RegExp("(?=.*[A-Z])");
-        const digit = new RegExp("(?=.*[0-9])");
-        const specialChar = new RegExp("(?=.*[(!@#$%&*()-+.,;?{}^><:)])");
-        const minLength = new RegExp("(?=.{8,})");
-
-        if (lowerCase.test(fields.password)) {
-            setConditionsPassword((prevState) => ({ ...prevState, lowerCase: true }))
-        } else {
-            setConditionsPassword((prevState) => ({ ...prevState, lowerCase: false }))
-        }
-
-        if (upperCase.test(fields.password)) {
-            setConditionsPassword((prevState) => ({ ...prevState, upperCase: true }))
-        } else {
-            setConditionsPassword((prevState) => ({ ...prevState, upperCase: false }))
-        }
-
-        if (digit.test(fields.password)) {
-            setConditionsPassword((prevState) => ({ ...prevState, digit: true }))
-        } else {
-            setConditionsPassword((prevState) => ({ ...prevState, digit: false }))
-        }
-
-        if (specialChar.test(fields.password)) {
-            setConditionsPassword((prevState) => ({ ...prevState, specialChar: true }))
-        } else {
-            setConditionsPassword((prevState) => ({ ...prevState, specialChar: false }))
-        }
-
-        if (minLength.test(fields.password)) {
-            setConditionsPassword((prevState) => ({ ...prevState, minLength: true }))
-        } else {
-            setConditionsPassword((prevState) => ({ ...prevState, minLength: false }))
-        }
-    }
-
-    function checkValidations(data) {
-        var value = 0;
-
-        for (const key in data)
-            value += data[key]
-
-        setTotalValidated(value)
-    }
-
-    async function handleSubmit(props) {
-        handleCreateParticipant(props)
-    }
-
-    function disabledButton() {
-        if (totalValidated == 5 && fields.password === fields.confirmPassword) {
-            setExtraValidation(false)
-        } else {
-            setExtraValidation(true)
-        }
-    }
 
     const onFieldChange = (event) => {
         let value = event.target.value
 
-        if (event.target.id === 'cnpj' || event.target.id === 'cpf') {
+        if (event.target.id === 'cep') {
             value = value.replace(/[^\w\s]/gi, '')
         }
 
@@ -107,9 +43,20 @@ export function Register() {
             value = event.target.checked;
         }
 
+        if (event.target.dataset.tag) {
+            setFields({ ...fields, [event.target.dataset.tag]: value })
+            return null
+        }
+
         setFields({ ...fields, [event.target.id]: value });
         setValidation(false)
     };
+
+    function createNewParticipant() {
+        handleCreateParticipant(fields)
+
+        setValidation(false)
+    }
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -124,130 +71,149 @@ export function Register() {
         setValidation(false)
     };
 
-    useEffect(() => {
-        handleValidationPassword()
-    }, [fields.password, fields.confirmPassword])
+    var cep = fields.zip.replace(/[^0-9]/g, '');
 
-    useEffect(() => {
-        disabledButton()
-        checkValidations(conditionsPassword)
-    }, [fields.password, fields.confirmPassword, conditionsPassword])
+    async function handleZip() {
+        const response = await axios.get("https://viacep.com.br/ws/" + cep + "/json")
 
-
-    useEffect(() => {
-        if (validation) {
-            handleSubmit(fields)
-        }
-    }, [validation])
-
-    useEffect(() => {
-        if (Object.keys(currentData).length !== 0) {
+        if (!response.data.erro)
             setFields({
                 ...fields,
-                cnpj: currentData.tax_id || '',
-                company: currentData.company_name || '',
-                representative: currentData.name || '',
-                branch: currentData.group || '',
-                email: currentData.email || '',
-                status: 'Approved',
+                street: response.data.logradouro,
+                district: response.data.bairro,
+                city: response.data.localidade,
+                state: response.data.uf,
             })
-        }
-    }, [currentData])
+    }
 
     useEffect(() => {
-        if (location.search) {
-            setCurrentData(JSON.parse(atob(location.search.replace('?company=', ''))))
-            setDisable(true)
+        if (fields.zip) {
+            handleZip()
         }
-    }, [location])
+    }, [fields.zip])
+
+    useEffect(() => {
+        if (validation)
+            createNewParticipant()
+    }, [validation])
 
     return (
         <main className="relative w-full h-auto min-h-screen bg-gradient-to-b from-client-primary to-client-secondary">
             <article className="max-w-5xl h-full mx-auto py-8 px-10 md:px-12 bg-white text-body flex flex-col gap-8">
-                <header className="h-16 pb-4 border-b">
-                    <div className="w-full flex justify-center">
-                        <img src={Car} alt="" />
-                    </div>
-                </header>
 
                 <section className="flex-1 flex flex-col items-center">
                     <div className="text-center py-7">
-                        <h1 className="uppercase font-extrabold text-3xl text-center text-client-primary font-titillium">Finalize o seu cadastro para <br className="hidden lg:block" />participar das campanhas</h1>
+                        <h1 className="uppercase font-extrabold text-3xl text-center text-client-primary font-titillium">Cadastre-se</h1>
                         <p className="text-base pt-3">Preencha os campos abaixo para se cadastrar.</p>
                     </div>
 
                     <form onSubmit={onSubmit} className="w-full flex flex-col gap-8 lg:w-1/2">
-                        <TaxCode
-                            label={'CNPJ da sua empresa'}
-                            id={'cnpj'}
+                        <Text
+                            label={'Nome'}
+                            id={'firstName'}
                             onChange={onFieldChange}
-                            value={fields.cnpj}
-                            disabled={disable}
+                            value={fields.firstName}
                             required
                         />
 
                         <Text
-                            label={'Razão social'}
-                            id={'company'}
+                            label={'Nome do meio'}
+                            id={'middleName'}
                             onChange={onFieldChange}
-                            value={fields.company}
-                            disabled={disable}
+                            value={fields.middleName}
+                        />
+
+                        <Text
+                            label={'Sobrenome'}
+                            id={'lastName'}
+                            onChange={onFieldChange}
+                            value={fields.lastName}
+                            required
+                        />
+
+                        <Phone
+                            label={'Celular'}
+                            id={'phone'}
+                            onChange={onFieldChange}
+                            value={fields.phone}
+                            required
+                        />
+
+                        <Radio
+                            label={'Gênero'}
+                            id={'gender'}
+                            onChange={onFieldChange}
+                            value={fields.gender}
+                            // required
+                            options={[
+                                {
+                                    label: "Feminino",
+                                    value: "female"
+                                },
+                                {
+                                    label: "Masculino",
+                                    value: "male"
+                                }
+                            ]}
+                        />
+
+                        <Date
+                            label={'Data de nascimento'}
+                            id={'birth'}
+                            onChange={onFieldChange}
+                            value={fields.birth}
+                            required
+                        />
+
+                        <Zip
+                            label={'CEP'}
+                            id={'zip'}
+                            onChange={onFieldChange}
+                            value={fields.zip}
                             required
                         />
 
                         <Text
-                            label={'Nome do representante'}
-                            id={'representative'}
+                            label={'Rua'}
+                            id={'street'}
                             onChange={onFieldChange}
-                            value={fields.representative}
+                            value={fields.street}
+                            disabled={true}
                             required
                         />
 
-                        <Select
-                            label="Qual filial atende?"
-                            id="branch"
+                        <Text
+                            label={'Número'}
+                            id={'complement'}
                             onChange={onFieldChange}
-                            value={fields.branch}
-                            required
-                            placeholder={'Selecione uma filial'}
-                            options={filiais}
-                        />
-
-                        <Email
-                            label={'E-mail'}
-                            id={'email'}
-                            onChange={onFieldChange}
-                            value={fields.email}
-                            disabled={disable}
+                            value={fields.complement}
                             required
                         />
 
-                        <TaxID
-                            label={'CPF'}
-                            id={'cpf'}
+                        <Text
+                            label={'Bairro'}
+                            id={'district'}
                             onChange={onFieldChange}
-                            value={fields.cpf}
+                            value={fields.district}
+                            disabled={true}
                             required
                         />
 
-                        <Password
-                            label={'Digite sua senha'}
-                            id={'password'}
+                        <Text
+                            label={'Cidade'}
+                            id={'city'}
                             onChange={onFieldChange}
-                            value={fields.password}
-                            extraValidation={setExtraValidation}
-                            totalValidated={totalValidated}
-                            compare={fields.confirmPassword}
+                            value={fields.city}
+                            disabled={true}
                             required
                         />
 
-                        <Password
-                            label={'Confirme a senha'}
-                            id={'confirmPassword'}
+                        <Text
+                            label={'UF'}
+                            id={'state'}
                             onChange={onFieldChange}
-                            value={fields.confirmPassword}
-                            extraValidation={setExtraValidation}
-                            compare={fields.password}
+                            value={fields.state}
+                            disabled={true}
                             required
                         />
 
@@ -255,20 +221,12 @@ export function Register() {
                             <Link to={"/"} className="text-client-primary text-lg font-semibold"><CaretLeft size={24} weight="bold" className="inline" /> Voltar</Link>
 
                             <Button
-                                label={'Cadastrar'} disabled={extraValidation}
+                                label={'Cadastrar'}
                             />
                         </section>
                     </form>
                 </section>
 
-                <footer className="pt-6 border-t flex flex-col md:items-center gap-1">
-                    <p>
-                        Dúvidas? Escreva para: <br className="md:hidden"/> <a href="mailto:atendimento@campanhasrolesrpr.com.br" className="text-client-primary font-semibold">atendimento@campanhasrolesrpr.com.br</a>
-                    </p>
-                    <small className="text-justify">
-                        Antes de participar, consulte o regulamento completo para demais informações, produtos participantes e condições. Imagens meramente ilustrativas.
-                    </small>
-                </footer>
             </article>
             {modal.state && <Modal />}
         </main>

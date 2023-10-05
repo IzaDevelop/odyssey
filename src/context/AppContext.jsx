@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import api from "../services/api";
+// import api from "../services/api";
 
 const AppContext = createContext({})
 
@@ -89,11 +89,61 @@ export function AppContextProvider({ children }) {
 
     const fhirEndpoint = 'https://fihrworkspace-fiap-challange-fhir.fhir.azurehealthcareapis.com/';
 
-    function getHttpHeader(accessToken) {
-        return {
-            Authorization: 'Bearer ' + accessToken,
-            'Content-type': 'application/json',
-        };
+    async function getAuthToken() {
+        try {
+            const response = await axios.post(
+                aadTenant + aadTenantId + '/oauth2/token', {
+                client_id: appId,
+                client_secret: appSecret,
+                grant_type: 'client_credentials',
+                esource: fhirEndpoint,
+            },
+                // new URLSearchParams({
+                //     client_id: appId,
+                //     client_secret: appSecret,
+                //     grant_type: 'client_credentials',
+                //     resource: fhirEndpoint,
+                // }),
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }
+            );
+            console.log(response)
+            const accessToken = response.data.access_token;
+            console.log('\tAAD Access Token acquired: ' + accessToken.substring(0, 50) + '...');
+            return accessToken;
+        } catch (error) {
+            console.log(error.response.data);
+            console.log('\tError getting token: ' + error.response.status);
+            return null;
+        }
+    }
+
+    async function getAuthToken() {
+        try {
+            const response = await axios.post(
+                aadTenant + aadTenantId + '/oauth2/token', {
+                client_id: appId,
+                client_secret: appSecret,
+                grant_type: 'client_credentials',
+                resource: fhirEndpoint,
+            },
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }
+            );
+            console.log(response);
+            const accessToken = response.data.access_token;
+            console.log('\tAAD Access Token acquired: ' + accessToken.substring(0, 50) + '...');
+            return accessToken;
+        } catch (error) {
+            console.error('\tError getting token:', error);
+            return null;
+        }
     }
 
     function printResourceData(resource) {
@@ -119,83 +169,64 @@ export function AppContextProvider({ children }) {
         }
     }
 
-    async function getAuthToken() {
-        try {
-            const response = await axios.post(
-                aadTenant + aadTenantId + '/oauth2/token',
-                new URLSearchParams({
-                    client_id: appId,
-                    client_secret: appSecret,
-                    grant_type: 'client_credentials',
-                    resource: fhirEndpoint,
-                }),
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                }
-            );
-            const accessToken = response.data.access_token;
-            console.log('\tAAD Access Token acquired: ' + accessToken.substring(0, 50) + '...');
-            return accessToken;
-        } catch (error) {
-            console.error(error.response.data);
-            console.error('\tError getting token: ' + error.response.status);
-            return null;
-        }
+    function getHttpHeader(accessToken) {
+        return {
+            Authorization: 'Bearer ' + accessToken,
+            'Content-type': 'application/json',
+        };
     }
 
     // PATIENT
 
-    async function postPatient(accessToken, props) {
-        const patientData = {
-            resourceType: "Patient",
-            active: true,
-            "name": [
-                {
-                    use: "official",
-                    family: props.lastName,
-                    given: [props.firstName, props.middleName]
-                }
-            ],
-            telecom: [
-                {
-                    "system": "phone",
-                    "value": props.phone,
-                    "use": "mobile",
-                    "rank": 1
-                }
-            ],
-            gender: props.gender,
-            birthDate: props.birth,
-            address: [
-                {
-                    use: "home",
-                    type: "both",
-                    text: "Rua Qualquer Endereço 1234 - Apto 54",
-                    line: ["Qualquer Endereço 1234", "Apto 54"],
-                    city: props.city,
-                    district: props.neighborhood,
-                    state: props.state,
-                    postalCode: props.cep,
-                    period: { "start": "1994-09-26" }
+    // async function handleCreateParticipant(data) {
+    //     const patientData = {
+    //         resourceType: "Patient",
+    //         active: true,
+    //         name: [
+    //             {
+    //                 use: "official",
+    //                 family: data.lastName,
+    //                 given: [data.firstName, data.middleName]
+    //             }
+    //         ],
+    //         telecom: [
+    //             {
+    //                 system: "phone",
+    //                 value: data.phone,
+    //                 use: "mobile",
+    //                 rank: 1
+    //             }
+    //         ],
+    //         gender: data.gender,
+    //         birthDate: data.birth,
+    //         address: [
+    //             {
+    //                 use: "home",
+    //                 type: "both",
+    //                 text: [data.street - data.complement],
+    //                 line: [data.street, data.complement],
+    //                 city: data.city,
+    //                 district: data.district,
+    //                 state: data.state,
+    //                 postalCode: data.zip,
+    //                 period: { "start": "1994-09-26" }
 
-                }
-            ]
-        };
+    //             }
+    //         ]
+    //     };
 
-        try {
-            const response = await axios.post(fhirEndpoint + 'Patient', patientData, {
-                headers: getHttpHeader(accessToken),
-            });
-            const resourceId = response.data.id;
-            console.log('\tPatient ingested: ' + resourceId + '. HTTP ' + response.status);
-            return resourceId;
-        } catch (error) {
-            console.error('\tError persisting patient: ' + error.response.status);
-            return null;
-        }
-    }
+    //     try {
+    //         const response = await axios.post(fhirEndpoint + 'Patient', patientData, {
+    //             headers: getHttpHeader(accessToken),
+    //         });
+    //         const resourceId = response.data.id;
+    //         console.log('\tPatient ingested: ' + resourceId + '. HTTP ' + response.status);
+    //         return resourceId;
+    //     } catch (error) {
+    //         console.error('\tError persisting patient: ' + error.response.status);
+    //         return null;
+    //     }
+    // }
 
     return (
         <AppContext.Provider value={{
@@ -209,8 +240,10 @@ export function AppContextProvider({ children }) {
             setModal,
 
             getHttpHeader,
-            printResponseResults,
-            getAuthToken,
+            // printResponseResults,
+            // getAuthToken,
+
+            // handleCreateParticipant,
         }}>
             {children}
         </AppContext.Provider>
