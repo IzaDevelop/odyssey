@@ -12,7 +12,7 @@ import { Button } from "../../components/form/Button";
 import { Modal } from "../../components/Modal";
 
 export function Register() {
-    const { handleCreateParticipant, modal } = useAppContext()
+    const { handleCreatePatient, modal } = useAppContext()
 
     const [fields, setFields] = useState({
         firstName: "",
@@ -53,7 +53,7 @@ export function Register() {
     };
 
     function createNewParticipant() {
-        handleCreateParticipant(fields)
+        handleCreatePatient(fields)
 
         setValidation(false)
     }

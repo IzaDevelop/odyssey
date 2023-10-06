@@ -28,7 +28,7 @@ export function Modal() {
     }
 
     const modalClass = classNames(
-        "w-full h-screen fixed inset-0 flex items-center justify-center z-30 bg-body bg-opacity-60",
+        "w-full h-screen fixed inset-0 flex items-center justify-center z-30 bg-neutral-600 bg-opacity-60",
         {
             "hidden": !modal.state,
             "flex": modal.state
@@ -59,10 +59,10 @@ export function Modal() {
     return (
         <div className={modalClass}>
             <div className={modalContent}>
-                <div className="flex justify-center items-center pb-4">
+                <div className="flex justify-center items-center pb-2">
                     <h5 className="font-titillium font-extrabold text-center text-2xl text-client-primary" dangerouslySetInnerHTML={{ __html: modal.title }} />
                 </div>
-                <div className="flex-1 flex text-center items-center justify-center max-h-[500px] overflow-auto">
+                <div className="flex-1 flex text-center text-lg items-center justify-center max-h-[500px] overflow-auto">
                     {modal.message !== "" ? (
                         <div dangerouslySetInnerHTML={{ __html: modal.message }}
                         ></div>
@@ -70,12 +70,12 @@ export function Modal() {
                         <>{modal.children}</>
                     )}
                 </div>
-                <div className="pt-5 w-full flex justify-evenly">
+                <div className="pt-2 w-full flex justify-evenly">
                     {modal.buttons.map((row, index) => (
                         <button key={index}
                             disabled={row.disabled ? disable : false}
                             onClick={!row.function ? () => handleCloseModal(row) : row.extraFunction()}
-                            className={`py-3 px-8 rounded-lg text-white font-semibold ${row.custom ? 'bg-client-primary' : 'bg-muted'}`}
+                            className={`py-3 px-8 rounded-lg text-white font-semibold bg-verde`}
                         >
                             {row.text}
                         </button>

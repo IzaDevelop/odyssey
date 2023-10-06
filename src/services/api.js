@@ -3,6 +3,12 @@ import apiUrl from "./apiUrl";
 
 const api = axios.create({
     baseURL: apiUrl,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+    },
+    'Access-Control-Allow-Credentials':true,
+    'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
 })
 
 api.interceptors.request.use(async config => {
