@@ -4,23 +4,21 @@ import apiUrl from "./apiUrl";
 const api = axios.create({
     baseURL: apiUrl,
     headers: {
-        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
     },
-    'Access-Control-Allow-Credentials':true,
     'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
 })
 
-api.interceptors.request.use(async config => {
-    const tokenLoggedUser = localStorage.getItem("tokenLoggedUser") || undefined;
+// api.interceptors.request.use(async config => {
+//     const tokenLoggedUser = localStorage.getItem("tokenLoggedUser") || undefined;
 
-    if (tokenLoggedUser) {
-        config.headers.Authorization = `Bearer ${tokenLoggedUser}`
-    }
+//     if (tokenLoggedUser) {
+//         config.headers.Authorization = `Bearer ${tokenLoggedUser}`
+//     }
 
-    config.headers['Accept-Language'] = 'pt-BR'
+//     config.headers['Accept-Language'] = 'pt-BR'
 
-    return config
-})
+//     return config
+// })
 
 export default api
