@@ -82,6 +82,9 @@ export function AppContextProvider({ children }) {
     // PATIENT
 
     async function handleCreatePatient(data) {
+        const birthDate = new Date(data.birth);
+        const formattedBirthDate = `${birthDate.getFullYear()}-${(birthDate.getMonth() + 1).toString().padStart(2, '0')}-${birthDate.getDate().toString().padStart(2, '0')}`;
+    
         await api.post("Prod/patient", {
             resourceType: "Patient",
             active: true,
@@ -101,7 +104,7 @@ export function AppContextProvider({ children }) {
                 }
             ],
             gender: data.gender,
-            birthDate: data.birth,
+            birthDate: formattedBirthDate,
             address: [
                 {
                     use: "home",
