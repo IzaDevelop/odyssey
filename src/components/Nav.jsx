@@ -4,7 +4,7 @@ import { useAppContext } from "../context/AppContext";
 import { List } from "@phosphor-icons/react/dist/ssr/List";
 
 export function Nav() {
-    const { menu, setMenu } = useAppContext()
+    const { menu, setMenu, handleEmergency } = useAppContext()
 
     return (
         <div className="relative flex items-center justify-between py-5 px-10 z-10">
@@ -38,14 +38,14 @@ export function Nav() {
                     </Link>
                 </li>
                 <li>
-                    <Link
+                    <button onClick={() => handleEmergency()}
                         to={''}
                         aria-label="Emergência"
                         title="Emergência"
                         className="font-medium tracking-wide transition-colors duration-200 hover:text-deep-purple-accent-400"
                     >
                         Emergência
-                    </Link>
+                    </button>
                 </li>
             </ul>
             <ul className="items-center hidden space-x-8 lg:flex">

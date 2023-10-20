@@ -84,7 +84,7 @@ export function AppContextProvider({ children }) {
     async function handleCreatePatient(data) {
         const birthDate = new Date(data.birth);
         const formattedBirthDate = `${birthDate.getFullYear()}-${(birthDate.getMonth() + 1).toString().padStart(2, '0')}-${birthDate.getDate().toString().padStart(2, '0')}`;
-    
+
         await api.post("Prod/patient", {
             resourceType: "Patient",
             active: true,
@@ -160,6 +160,71 @@ export function AppContextProvider({ children }) {
 
     async function handleEmergency() {
 
+        var token = localStorage.getItem('token')
+
+        await api.post("Prod/occurrence", {
+            "resourceType": "Observation",
+            "id": token,
+            "meta": {
+                "versionId": "1",
+                "lastUpdated": "2023-10-06T17:16:07.756+00:00"
+            },
+            "status": "final",
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://loinc.org",
+                        "code": "789-8",
+                        "display": "Body Weight"
+                    }
+                ],
+                "text": "Body Weight"
+            },
+            "subject": {
+                "reference": `Patient/${token}`
+            },
+            "effectiveDateTime": "2023-10-06T10:30:00Z",
+            "valueQuantity": {
+                "value": 70,
+                "unit": "kg",
+                "system": "http://unitsofmeasure.org",
+                "code": "kg"
+            }
+        }).then(response => {
+            setModal({
+                state: true,
+                title: "Sucesso",
+                message: 'A ambulância foi chamada sucesso',
+                children: null,
+                buttons: [
+                    {
+                        text: "Fechar",
+                        function: undefined,
+                        reload: false,
+                        redirect: "/app",
+                        custom: ""
+                    }
+                ]
+            });
+        }).catch(err => {
+            console.log(err)
+
+            setModal({
+                state: true,
+                title: "Ops",
+                message: "Não foi possível chamar a ambulância",
+                children: null,
+                buttons: [
+                    {
+                        text: "Fechar",
+                        function: undefined,
+                        reload: false,
+                        redirect: "",
+                        custom: "alert"
+                    }
+                ]
+            });
+        });
     }
 
     return (
@@ -173,7 +238,8 @@ export function AppContextProvider({ children }) {
             modal,
             setModal,
 
-            handleCreatePatient
+            handleCreatePatient,
+            handleEmergency
         }}>
             {children}
         </AppContext.Provider>
