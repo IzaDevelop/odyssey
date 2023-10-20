@@ -1,9 +1,11 @@
-import { Tag } from "../../components/Tag";
 import { Card } from "../../components/Card";
 import { Layout } from "../../components/Layout";
-import { AppLogo, iconAlert, iconChecklist, iconHeart, iconRemedy } from "../../assets";
+import { useAppContext } from "../../context/AppContext";
+import { iconAlert, iconChecklist, iconHeart, iconRemedy } from "../../assets";
 
 export function Home() {
+    const { handleEmergency } = useAppContext()
+
     return (
         <Layout>
             <section className="flex flex-wrap justify-between items-center gap-5 p-10">
@@ -27,6 +29,7 @@ export function Home() {
                     link={''}
                     button={'Chamar socorrista imediatamente'}
                     custom={'border-orange-500'}
+                    function={() => handleEmergency()}
                 />
 
                 <Card

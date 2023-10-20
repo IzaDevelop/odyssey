@@ -194,14 +194,14 @@ export function AppContextProvider({ children }) {
             setModal({
                 state: true,
                 title: "Sucesso",
-                message: 'A ambulância foi chamada sucesso',
+                message: 'A ambulância está a caminho',
                 children: null,
                 buttons: [
                     {
                         text: "Fechar",
                         function: undefined,
                         reload: false,
-                        redirect: "/app",
+                        redirect: "",
                         custom: ""
                     }
                 ]

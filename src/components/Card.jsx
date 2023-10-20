@@ -12,12 +12,21 @@ export function Card(props) {
                 <p className="py-5 text-gray-900">
                     {props.text}
                 </p>
-                <Link
+                {props.function ? (
+                     <button
+                     onClick={() => props.function()}
+                     className="text-neutral-500 text-sm"
+                 >
+                     {props.button} <CaretRight className="inline" size={20} />
+                 </button>
+                ) : (
+                    <Link
                     to={props.link}
                     className="text-neutral-500 text-sm"
                 >
                     {props.button} <CaretRight className="inline" size={20} />
                 </Link>
+                )}               
             </div>
         </div >
     )
