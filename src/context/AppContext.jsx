@@ -151,7 +151,7 @@ export function AppContextProvider({ children }) {
                         function: undefined,
                         reload: false,
                         redirect: "",
-                        custom: "alert"
+                        custom: ""
                     }
                 ]
             });
@@ -220,7 +220,7 @@ export function AppContextProvider({ children }) {
                         function: undefined,
                         reload: false,
                         redirect: "",
-                        custom: "alert"
+                        custom: ""
                     }
                 ]
             });
