@@ -1,7 +1,10 @@
 import { Nav } from "./Nav";
+import { Modal } from "./Modal";
 import { Footer } from "./Footer";
+import { useAppContext } from "../context/AppContext";
 
 export function Layout(props) {
+    const { modal } = useAppContext()
 
     return (
         <>
@@ -12,6 +15,7 @@ export function Layout(props) {
                 </article>
             </main>
             <Footer />
+            {modal.state && <Modal />}
         </>
     )
 }
