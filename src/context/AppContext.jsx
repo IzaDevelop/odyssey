@@ -239,7 +239,7 @@ export function AppContextProvider({ children }) {
             setModal,
 
             handleCreatePatient,
-            handleEmergency
+            handleEmergency,
         }}>
             {children}
         </AppContext.Provider>
