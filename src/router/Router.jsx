@@ -24,7 +24,7 @@ export function Router() {
                     </Route>
 
                     {/* <Route element={<PrivateRoute />}> */}
-                        <Route path="/home" element={<Home />} />
+                        <Route path="/app" element={<Home />} />
                     {/* </Route> */}
                 </Routes>
                 :

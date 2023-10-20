@@ -130,11 +130,13 @@ export function AppContextProvider({ children }) {
                         text: "Fechar",
                         function: undefined,
                         reload: false,
-                        redirect: "/login",
+                        redirect: "/app",
                         custom: ""
                     }
                 ]
             });
+
+            localStorage.setItem('token', response.data)
         }).catch(err => {
             console.log(err)
 
@@ -154,6 +156,10 @@ export function AppContextProvider({ children }) {
                 ]
             });
         });
+    }
+
+    async function handleEmergency() {
+
     }
 
     return (

@@ -1,12 +1,25 @@
 import { Tag } from "../../components/Tag";
 import { Card } from "../../components/Card";
 import { Layout } from "../../components/Layout";
-import { iconAlert, iconChecklist, iconHeart, iconRemedy } from "../../assets";
+import { AppLogo, iconAlert, iconChecklist, iconHeart, iconRemedy } from "../../assets";
 
 export function Home() {
     return (
         <Layout>
-            <section className="flex flex-wrap justify-between items-center gap-3 p-10">
+            <section className="flex flex-wrap justify-between items-center gap-5 p-10">
+                <div className="w-full">
+                    <div className="max-w-screen-sm sm:text-center sm:mx-auto">
+                        
+                        <h2 className="mb-4 font-sans text-xl font-bold tracking-tight sm:text-3xl sm:leading-none">
+                            Bem-vindo ao seu portal de saúde pessoal
+                        </h2>
+                        <p className="text-base md:text-lg sm:px-4">
+                            Oferecemos uma plataforma completa e acessível para você acompanhar sua saúde e receber assistência em momentos críticos.
+                        </p>
+                        <hr className="w-full my-8 border-gray-300" />
+                    </div>
+                </div>
+
                 <Card
                     icon={iconAlert}
                     title={'Chamar emergência'}
@@ -28,7 +41,7 @@ export function Home() {
                 <Card
                     icon={iconChecklist}
                     title={'Checklist de saúde'}
-                    text={'Configure seus dados de saúde e mantenha-os sempre atualizados!'}
+                    text={'Configure seus dados de saúde e mantenha-os atualizados!'}
                     link={''}
                     button={'Realizar checklist de saúde'}
                     custom={'border-green-500'}
@@ -42,26 +55,6 @@ export function Home() {
                     button={'Controle de medicamentos'}
                     custom={'border-blue-500'}
                 />
-            </section>
-
-            <section className="flex flex-col justify-start flex-wrap gap-3 pb-10 px-10">
-                <h1 className="text-xl md:text-3xl font-semibold">Acesse</h1>
-                <div className="flex justify-start items-center flex-wrap gap-3 ">
-                    <Tag
-                        link={''}
-                        text={'Suas ultimas chamadas'}
-                    />
-
-                    <Tag
-                        link={''}
-                        text={'Histórico de emergências'}
-                    />
-
-                    <Tag
-                        link={''}
-                        text={'Registros de saúde'}
-                    />
-                </div>
             </section>
         </Layout>
     )

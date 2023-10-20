@@ -3,7 +3,7 @@ import { CaretRight } from "@phosphor-icons/react";
 
 export function Card(props) {
     return (
-        <div className="w-full md:max-w-[290px] h-30">
+        <div className="w-full lg:max-w-[280px] h-30">
             <div className={`p-5 bg-white border ${props.custom} rounded shadow-sm`}>
                 <div className="flex items-center justify-center w-12 h-12 pb-4">
                     <img src={props.icon} alt="" />

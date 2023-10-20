@@ -40,7 +40,7 @@ export function Navbar() {
                 </li>
                 <li>
                     <Link
-                        to={'/home'}
+                        to={'/app'}
                         aria-label="Nosso App"
                         title="Nosso App"
                         className="font-medium tracking-wide text-white transition-colors duration-200 hover:text-deep-purple-accent-400"
@@ -123,7 +123,7 @@ export function Navbar() {
                                 </li>
                                 <li>
                                     <Link
-                                        to={'/home'}
+                                        to={'/app'}
                                         aria-label="Nosso App"
                                         title="Nosso App"
                                         className="font-medium tracking-wide transition-colors duration-200 hover:text-deep-purple-accent-400"
