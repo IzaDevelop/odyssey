@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import moment from 'moment';
 import api from "../services/api";
 
 const AppContext = createContext({})
@@ -151,12 +152,59 @@ export function AppContextProvider({ children }) {
                         function: undefined,
                         reload: false,
                         redirect: "",
+                        custom: "alert"
+                    }
+                ]
+            });
+        });
+    }
+
+    // EMERGENCY DATA
+
+    async function handleDataEmergency() {
+
+        var ocurrence = localStorage.getItem('ocurrenceID')
+
+        await api.get(`Prod/occurrence/${ocurrence}`).then(response => {
+            console.log(response.data)
+
+            setModal({
+                state: true,
+                title: "Dados da ocorrência",
+                message: `A ambulância chegara <br/>` + moment(response.data.effectiveDateTime).format('DD/MM/YYYY, h:mm:ss a'),
+                children: null,
+                buttons: [
+                    {
+                        text: "Fechar",
+                        function: undefined,
+                        reload: false,
+                        redirect: "",
+                        custom: ""
+                    }
+                ]
+            });
+        }).catch(err => {
+            console.log(err)
+
+            setModal({
+                state: true,
+                title: "Ops",
+                message: "Não foi possível encontrar os dados da ocorrência",
+                children: null,
+                buttons: [
+                    {
+                        text: "Fechar",
+                        function: undefined,
+                        reload: false,
+                        redirect: "",
                         custom: ""
                     }
                 ]
             });
         });
     }
+
+    // EMERGENCY
 
     async function handleEmergency() {
 
@@ -191,18 +239,22 @@ export function AppContextProvider({ children }) {
                 "code": "kg"
             }
         }).then(response => {
+            localStorage.setItem('ocurrenceID', response.data.id)
+
             setModal({
                 state: true,
                 title: "Sucesso",
-                message: 'A ambulância está a caminho',
+                message: 'A ambulância foi chamada sucesso',
                 children: null,
                 buttons: [
                     {
-                        text: "Fechar",
-                        function: undefined,
+                        text: "Aguarde",
+                        function: setTimeout(() => {
+                            handleDataEmergency()
+                        }, 5000),
                         reload: false,
                         redirect: "",
-                        custom: ""
+                        custom: "disabled opacity-70 cursor-wait"
                     }
                 ]
             });
@@ -220,7 +272,7 @@ export function AppContextProvider({ children }) {
                         function: undefined,
                         reload: false,
                         redirect: "",
-                        custom: ""
+                        custom: "alert"
                     }
                 ]
             });

@@ -74,8 +74,8 @@ export function Modal() {
                     {modal.buttons.map((row, index) => (
                         <button key={index}
                             disabled={row.disabled ? disable : false}
-                            onClick={!row.function ? () => handleCloseModal(row) : row.extraFunction()}
-                            className={`py-3 px-8 rounded-lg text-white font-semibold bg-verde`}
+                            onClick={!row.function ? () => handleCloseModal(row) : () => row.extraFunction}
+                            className={`py-3 px-8 rounded-lg text-white font-semibold bg-verde ${row.custom}`}
                         >
                             {row.text}
                         </button>
