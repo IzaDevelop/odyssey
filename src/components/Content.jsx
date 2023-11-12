@@ -1,29 +1,39 @@
 export function Content(props) {
     return (
-        <div className="px-4 py-10 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl" id={props.id}>
-            <div className="grid gap-12 row-gap-8 lg:grid-cols-2">
-                <div className="flex flex-col justify-center">
-                    <div className="max-w-xl">
-                        <p className="text-xl font-light pb-2">
-                            {props.title}
-                        </p>
-                        <h2 className={`uppercase max-w-lg font-sans text-3xl font-bold tracking-tight ${props.custom} sm:text-4xl sm:leading-none`}>
-                            {props.emphasis}
-                        </h2>
-                        <p className="text-xl font-light py-5">
-                            {props.text}
-                        </p>
-                        <button className="text-verde text-lg font-semibold">{props.button}</button>
-                    </div>
+        <div className="px-4 pb-16 mx-auto max-w-screen-xl md:px-24 lg:px-8 lg:pb-20" id={props.id}>
+            <div className="w-full pt-10">
+                <div className="w-full">
+                    <h2 className="mb-5 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none md:text-center">
+                        {props.title} {' '}
+                        <span className={`uppercase max-w-lg font-sans text-3xl font-bold tracking-tight ${props.custom1} sm:text-4xl sm:leading-none`}>
+                            {props.emphasis1}
+                        </span> e <span className={`uppercase max-w-lg font-sans text-3xl font-bold tracking-tight ${props.custom2} sm:text-4xl sm:leading-none`}>
+                            {props.emphasis2}
+                        </span>.
+                    </h2>
+                    <p className="mb-5 text-base text-gray-700 md:text-lg md:text-center">
+                        {props.text}
+                    </p>
                 </div>
-                <div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
+                <div className="inset-y-0 top-0 right-0 w-full">
                     <img
-                        className="object-contain w-full h-40 sm:h-96"
-                        src={props.image}
-                        alt={props.alt}
+                        className="object-cover w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none md:h-96 lg:h-full"
+                        src={props.image1}
+                        alt={props.alt1}
+                    />
+                </div>
+                <div className="inset-y-0 top-0 right-0 w-full">
+                    <img
+                        className="object-cover w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none md:h-96 lg:h-full"
+                        src={props.image2}
+                        alt={props.alt2}
                     />
                 </div>
             </div>
+
         </div>
     );
 };

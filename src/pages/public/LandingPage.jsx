@@ -1,45 +1,36 @@
-import { News } from "../../components/News";
-import { Header } from "../../components/Header";
-import { Footer } from "../../components/Footer";
+import { Layout } from "../../components/Layout";
 import { Content } from "../../components/Content";
 import { Article } from "../../components/Article";
-import { Paciente, Socorrista } from "../../assets";
-import { useAppContext } from "../../context/AppContext";
+import { Price } from "../../components/Price";
+import { News } from "../../components/News";
 
 export function LP() {
     return (
-        <>
-            <Header />
+        <Layout>
             <article id="content" className="w-full relative min-h-screen">
                 <section className="w-full min-h-[calc(100vh-80px)] flex flex-col">
                     <Content
-                        id={'socorristas'}
                         title={'Para'}
-                        emphasis={'SOCORRISTAS,'}
-                        custom={'text-azul'}
-                        text={'ambulâncias adaptadas com equipamentos de altíssima qualidade e máximo conforto para seus plantões com tecnologia de ponta para receber os chamados.'}
-                        button={'Saiba mais!'}
-                        image={Socorrista}
-                        alt={'paciente'}
+                        emphasis1={'PACIENTES'}
+                        emphasis2={'SOCORRISTAS'}
+                        custom1={'text-rosa'}
+                        custom2={'text-azul'}
+                        text={'um serviço de emergência pronto para te atender 24h com profissionais qualificados e referêacias na área da saúde para pacientes e ambulâncias adaptadas com equipamentos de altíssima qualidade e máximo conforto para socorristas, com tecnologia de ponta para receber os chamados.'}
+                        button={'Saiba mais !'}
+                        image1={'https://star.med.br/wp-content/uploads/2022/10/medica-em-relacao-com-o-paciente-pediatra.jpg'}
+                        image2={'https://centraldecursos.com/wp-content/uploads/2021/02/Curso-de-socorrista.jpg'}
+                        alt1={'paciente'}
+                        alt2={'socorrista'}
+                        id={'sobre'}
                     />
 
-                    <Content
-                        id={'pacientes'}
-                        title={'Para'}
-                        emphasis={'PACIENTES,'}
-                        custom={'text-rosa'}
-                        text={'um serviço de emergência pronto para te atender 24h com profissionais qualificados e referêacias na área da saúde.'}
-                        button={'Saiba mais!'}
-                        image={Paciente}
-                        alt={'paciente'}
-                    />
+                    <Article/>
 
-                    <Article />
+                    <Price/>
 
-                    <News />
+                    <News/>
                 </section>
             </article>
-            <Footer />
-        </>
+        </Layout>
     )
 }

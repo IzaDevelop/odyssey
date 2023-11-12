@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { AppLogo, Logo } from "../assets";
+import { Logo } from "../assets";
 import { useAppContext } from "../context/AppContext";
 import { List } from "@phosphor-icons/react/dist/ssr/List";
 
@@ -14,15 +14,15 @@ export function Nav() {
                 title="Odyssey"
                 className="inline-flex items-center"
             >
-                <img src={AppLogo} alt="" />
+                <img src={Logo} alt="" />
             </a>
-            <ul className="items-center hidden space-x-8 lg:flex">
+            <ul className="items-center hidden space-x-8 lg:flex text-white">
                 <li>
                     <Link
                         to={'/'}
                         aria-label="Home"
                         title="Home"
-                        className="font-medium tracking-wide transition-colors duration-200 hover:text-deep-purple-accent-400"
+                        className="font-medium tracking-wide transition-colors duration-200 "
                     >
                         Home
                     </Link>
@@ -32,7 +32,7 @@ export function Nav() {
                         to={''}
                         aria-label="Perfil"
                         title="Perfil"
-                        className="font-medium tracking-wide transition-colors duration-200 hover:text-deep-purple-accent-400"
+                        className="font-medium tracking-wide transition-colors duration-200 "
                     >
                         Perfil
                     </Link>
@@ -42,7 +42,7 @@ export function Nav() {
                         to={''}
                         aria-label="Emergência"
                         title="Emergência"
-                        className="font-medium tracking-wide transition-colors duration-200 hover:text-deep-purple-accent-400"
+                        className="font-medium tracking-wide transition-colors duration-200 "
                     >
                         Emergência
                     </button>
@@ -52,7 +52,7 @@ export function Nav() {
                 <li>
                     <Link
                         to="/"
-                        className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-blue-500 rounded border border-blue-400"
+                        className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white rounded border border-white"
                         aria-label="Sair"
                         title="Sair"
                     >
@@ -67,11 +67,11 @@ export function Nav() {
                     className="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline hover:bg-deep-purple-50 focus:bg-deep-purple-50"
                     onClick={() => setMenu(true)}
                 >
-                    <List size={30} weight="bold" className="text-azul" />
+                    <List size={30} weight="bold" className="text-white" />
                 </button>
 
                 <div className={`absolute top-0 left-0 w-full ${menu ? 'visible' : 'hidden'}`} onClick={() => setMenu(false)}>
-                    <div className="p-5 bg-azul text-white">
+                    <div className="p-5 bg-blue-400 text-white">
                         <div className="flex items-center justify-between mb-4 px-5">
                             <div>
                                 <a
@@ -105,7 +105,7 @@ export function Nav() {
                                         to={'/'}
                                         aria-label="Home"
                                         title="Home"
-                                        className="font-medium tracking-wide transition-colors duration-200 hover:text-deep-purple-accent-400"
+                                        className="font-medium tracking-wide transition-colors duration-200 "
                                     >
                                         Home
                                     </Link>
@@ -115,17 +115,17 @@ export function Nav() {
                                         to={''}
                                         aria-label="Perfil"
                                         title="Perfil"
-                                        className="font-medium tracking-wide transition-colors duration-200 hover:text-deep-purple-accent-400"
+                                        className="font-medium tracking-wide transition-colors duration-200 "
                                     >
                                         Perfil
                                     </Link>
                                 </li>
                                 <li>
                                     <Link
-                                        to={''}
+                                        to="/"
+                                        className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white rounded border-none bg-azul w-full"
                                         aria-label="Sair"
                                         title="Sair"
-                                        className="font-medium tracking-wide transition-colors duration-200 hover:text-deep-purple-accent-400"
                                     >
                                         Sair
                                     </Link>

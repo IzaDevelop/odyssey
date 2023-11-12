@@ -21,7 +21,7 @@ export function Date(props) {
                 onChange={props.onChange}
                 disabled={props.disabled}
                 required={props.required}
-                className="w-full rounded-xl border-zinc-300 disabled:opacity-75 disabled:bg-neutral-200"
+                className="w-full rounded-xl text-neutral-800 border-none disabled:opacity-75 disabled:bg-neutral-200"
             />
         </div>
     );

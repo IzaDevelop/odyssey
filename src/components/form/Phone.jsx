@@ -20,7 +20,7 @@ export function Phone(props) {
                 onChange={props.onChange}
                 disabled={props.disabled}
                 required={props.required}
-                className="w-full rounded-xl border-zinc-300"
+                className="w-full rounded-xl border-none"
             />
         </div>
     );

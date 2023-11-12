@@ -1,4 +1,4 @@
-import { Nav } from "./Nav";
+import { Header } from "./Header";
 import { Modal } from "./Modal";
 import { Footer } from "./Footer";
 import { useAppContext } from "../context/AppContext";
@@ -8,7 +8,7 @@ export function Layout(props) {
 
     return (
         <>
-            <Nav/>
+            <Header/>
             <main className={`w-full relative`}>
                 <article className={`mx-auto max-w-7xl min-h-[calc(100vh-150px)] flex flex-col`}>
                     {props.children}

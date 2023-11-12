@@ -70,12 +70,12 @@ export function Modal() {
                         <>{modal.children}</>
                     )}
                 </div>
-                <div className="pt-2 w-full flex justify-evenly">
+                <div className="w-full flex justify-evenly">
                     {modal.buttons.map((row, index) => (
                         <button key={index}
                             disabled={row.disabled ? disable : false}
                             onClick={!row.function ? () => handleCloseModal(row) : () => row.extraFunction}
-                            className={`py-3 px-8 rounded-lg text-white font-semibold bg-verde ${row.custom}`}
+                            className={`py-3 px-8 rounded-lg text-white font-semibold bg-blue-600 hover:bg-blue-700 ${row.custom}`}
                         >
                             {row.text}
                         </button>

@@ -22,7 +22,7 @@ export function Radio(props) {
                                 required={props.required}
                                 alt={option.label}
                                 data-tag={props.id}
-                                className="form-radio text-verde checked:bg-verdeClaro focus:ring-verdeClaro"
+                                className="form-radio text-blue-300 checked:bg-blue-400 focus:ring-blue-400"
                             />
                             <label htmlFor={option.id}>
                                 {option.label}
