@@ -174,7 +174,7 @@ export function Emergency(props) {
 
                         <section className="flex justify-between items-center">
                             <Button
-                                label={'Chamar emergência'}
+                                label={'Chamar socorrista'}
                             />
 
                             <button type="button" onClick={() => handleCloseModal()} className="text-white bg-blue-400 hover:bg-blue-500 rounded-lg px-5 py-2 text-lg font-semibold">Fechar</button>
