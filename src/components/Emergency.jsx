@@ -15,6 +15,9 @@ export function Emergency(props) {
 
     const [validation, setValidation] = useState(false)
     const [loadingValidation, setLoadingValidation] = useState(false)
+    const [status, setStatus] = useState(false)
+    const [time, setTime] = useState('')
+    const [disableButton, setDisableButton] = useState(false)
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -24,6 +27,7 @@ export function Emergency(props) {
         setTimeout(() => {
             event.target.reportValidity() ? setValidation(event.target.reportValidity()) : setValidation(false)
             setLoadingValidation(false)
+            setDisableButton(true)
         }, 1000)
 
         setValidation(false)
@@ -69,8 +73,8 @@ export function Emergency(props) {
             })
 
             if (response.status === 200) {
-                console.log(response.estimated_time_of_arrival)
-                // setMessage(response.data.data)
+                setTime(response.data.estimated_time_of_arrival)
+                setStatus(true)
             }
         } catch (error) {
             console.log(error)
@@ -93,94 +97,59 @@ export function Emergency(props) {
                     <h5 className="font-titillium font-extrabold text-center text-2xl text-client-primary">Dados sobre a emergência</h5>
                 </div>
 
-                <div className="flex-1 flex text-start text-lg items-center justify-center max-h-[500px] overflow-auto">
-                    <form onSubmit={onSubmit} className="w-full flex flex-col gap-8 px-10">
-                        <Text
-                            label={'Nome'}
-                            id={'name'}
-                            onChange={onFieldChange}
-                            value={fields.name}
-                            required
-                        />
+                {status ? (
+                    <div className="flex flex-1 flex-col justify-center items-center text-center">
+                        <h5 className="pb-5">A ambulância chegara em {time} <br/> Aguarde no local informado.</h5>
 
-                        <Phone
-                            label={'Celular'}
-                            id={'phone'}
-                            onChange={onFieldChange}
-                            value={fields.phone}
-                            required
-                        />
-
-                        {/* <Text
-                            label={'Rua'}
-                            id={'street'}
-                            onChange={onFieldChange}
-                            value={fields.street}
-                            disabled={true}
-                            required
-                        />
-
-                        <Text
-                            label={'Número'}
-                            id={'complement'}
-                            onChange={onFieldChange}
-                            value={fields.complement}
-                            required
-                        />
-
-                        <Text
-                            label={'Bairro'}
-                            id={'district'}
-                            onChange={onFieldChange}
-                            value={fields.district}
-                            disabled={true}
-                            required
-                        />
-
-                        <Text
-                            label={'Cidade'}
-                            id={'city'}
-                            onChange={onFieldChange}
-                            value={fields.city}
-                            disabled={true}
-                            required
-                        />
-
-                        <Text
-                            label={'UF'}
-                            id={'state'}
-                            onChange={onFieldChange}
-                            value={fields.state}
-                            disabled={true}
-                            required
-                        /> */}
-
-                        <Text
-                            label={'Tipo de emergência'}
-                            id={'type'}
-                            onChange={onFieldChange}
-                            value={fields.type}
-                            required
-                        />
-
-
-                        <Text
-                            label={'Detalhes da emergência'}
-                            id={'details'}
-                            onChange={onFieldChange}
-                            value={fields.details}
-                            required
-                        />
-
-                        <section className="flex justify-between items-center">
-                            <Button
-                                label={'Chamar socorrista'}
+                        <button type="button" onClick={() => handleCloseModal()} className="text-white bg-blue-400 hover:bg-blue-500 rounded-lg px-5 py-2 text-lg font-semibold">Fechar</button>
+                    </div>
+                ) : (
+                    <div className="flex-1 flex text-start text-lg items-center justify-center max-h-[500px] overflow-auto">
+                        <form onSubmit={onSubmit} className="w-full flex flex-col gap-8 px-10">
+                            <Text
+                                label={'Nome'}
+                                id={'name'}
+                                onChange={onFieldChange}
+                                value={fields.name}
+                                required
                             />
 
-                            <button type="button" onClick={() => handleCloseModal()} className="text-white bg-blue-400 hover:bg-blue-500 rounded-lg px-5 py-2 text-lg font-semibold">Fechar</button>
-                        </section>
-                    </form>
-                </div>
+                            <Phone
+                                label={'Celular'}
+                                id={'phone'}
+                                onChange={onFieldChange}
+                                value={fields.phone}
+                                required
+                            />
+
+                            <Text
+                                label={'Tipo de emergência'}
+                                id={'type'}
+                                onChange={onFieldChange}
+                                value={fields.type}
+                                required
+                            />
+
+
+                            <Text
+                                label={'Detalhes da emergência'}
+                                id={'details'}
+                                onChange={onFieldChange}
+                                value={fields.details}
+                                required
+                            />
+
+                            <section className="flex justify-between items-center">
+                                <Button
+                                    label={'Chamar socorrista'}
+                                    disabled={disableButton}
+                                />
+
+                                <button type="button" onClick={() => handleCloseModal()} className="text-white bg-blue-400 hover:bg-blue-500 rounded-lg px-5 py-2 text-lg font-semibold">Fechar</button>
+                            </section>
+                        </form>
+                    </div>
+                )}
             </div>
         </div>
     )

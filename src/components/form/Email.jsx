@@ -17,7 +17,7 @@ export function Email(props) {
                 onChange={props.onChange}
                 disabled={props.disabled}
                 required={props.required}
-                className="w-full rounded-xl border-none disabled:opacity-75 disabled:bg-neutral-200"
+                className="w-full rounded-xl border disabled:opacity-75 disabled:bg-neutral-200"
             />
         </div>
     );

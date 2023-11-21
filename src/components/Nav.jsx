@@ -1,14 +1,10 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Logo } from "../assets";
 import { useAppContext } from "../context/AppContext";
 import { List } from "@phosphor-icons/react/dist/ssr/List";
-import { Emergency } from "./Emergency";
 
 export function Nav() {
-    const { menu, setMenu, handleEmergency } = useAppContext()
-
-    const [modal, setModal] = useState(false)
+    const { menu, setMenu } = useAppContext()
 
     return (
         <>
@@ -41,17 +37,6 @@ export function Nav() {
                         >
                             Perfil
                         </Link>
-                    </li>
-                    <li>
-                        {/* <button onClick={() => handleEmergency()} */}
-                        <button onClick={() => setModal(true)}
-                            to={''}
-                            aria-label="Emergência"
-                            title="Emergência"
-                            className="font-medium tracking-wide transition-colors duration-200 "
-                        >
-                            Emergência
-                        </button>
                     </li>
                 </ul>
                 <ul className="items-center hidden space-x-8 lg:flex">
@@ -142,7 +127,6 @@ export function Nav() {
                     </div>
                 </div>
             </div>
-            {modal && <Emergency open={modal} close={setModal}/>}
         </>
     )
 }

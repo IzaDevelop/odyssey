@@ -20,7 +20,7 @@ export function Zip(props) {
                 onChange={props.onChange}
                 disabled={props.disabled}
                 required={props.required}
-                className="w-full rounded-xl border-none"
+                className="w-full rounded-xl border"
             />
         </div>
     );

@@ -1,11 +1,12 @@
+import { useState } from "react";
 import { Layout } from "../../components/Layout";
 import { Card } from "../../components/Card";
 import { Options } from "../../components/Options";
-import { useAppContext } from "../../context/AppContext";
+import { Emergency } from "../../components/Emergency";
 import { iconAlert, iconChecklist, iconHeart, iconRemedy } from "../../assets";
 
 export function Home() {
-    const { handleEmergency } = useAppContext()
+    const [modal, setModal] = useState(false)
 
     return (
         <Layout>
@@ -19,7 +20,7 @@ export function Home() {
                     link={''}
                     button={'Chamar socorrista imediatamente'}
                     custom={'border-orange-500'}
-                    function={() => handleEmergency()}
+                    function={() => setModal(true)}
                 />
 
                 <Card
@@ -49,6 +50,7 @@ export function Home() {
                     custom={'border-blue-500'}
                 />
             </section>
+            {modal && <Emergency open={modal} close={setModal}/>}
         </Layout>
     )
 }
