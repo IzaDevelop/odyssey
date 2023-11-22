@@ -1,7 +1,10 @@
 import api from "../../services/api";
 import { useState, useEffect } from "react";
+import { Layout } from "../../components/Layout";
+import { Loading } from "../../components/Loading";
 
-export function Profile() {
+export function Profile() {   
+    const [loading, setLoading] = useState(true)
     const [list, setList] = useState('')
 
     const EmergencyList = async () => {
@@ -10,6 +13,9 @@ export function Profile() {
 
             if (response.status === 200) {
                 setList(response.data)
+                setTimeout(() => {
+                    setLoading(false)
+                }, 100)
             }
         } catch (error) {
             console.log(error)
@@ -23,9 +29,8 @@ export function Profile() {
     }, [list])
 
     return (
-        <section className="p-10">
-            <div>
-
+        <Layout>
+            <section className="py-10">
                 <div className="w-full h-auto py-3 grid items-center bg-client-primary text-neutral-950">
                     <span className="relative flex justify-center">
                         <div
@@ -36,11 +41,14 @@ export function Profile() {
                     </span>
                 </div>
 
-                <div className="w-full max-w-3xl flex flex-col mx-auto pt-8">
+                {loading ? (
+                    <Loading />
+                ) : (
+                    <div className="w-full max-w-3xl flex flex-col mx-auto pt-8">
                     <div className="w-full h-auto py-3 grid grid-cols-4 items-center bg-blue-800 text-white">
                         <div className="text-center font-semibold">
                             <p>
-                                Nome do Paciente
+                                Nome do paciente
                             </p>
                         </div>
                         <div className="text-center font-semibold">
@@ -57,17 +65,17 @@ export function Profile() {
                     <div className="mt-2">
                         {list && list.map((row, key) =>
                             <div className="w-full h-auto py-3 grid grid-cols-4 items-center bg-client-ghost mb-2 border text-sm bg-blue-200" key={key}>
-                                <div className="text-center uppercase">
+                                <div className="text-center uppercase truncate">
                                     <p>
                                         {row.patient_name}
                                     </p>
                                 </div>
-                                <div className="text-center">
+                                <div className="text-center truncate">
                                     <p>
                                         {row.patient_phone}
                                     </p>
                                 </div>
-                                <div className="text-center">
+                                <div className="text-center truncate">
                                     <p>
                                         {row.estimated_time_of_completion}
                                     </p>
@@ -79,8 +87,8 @@ export function Profile() {
                         )}
                     </div>
                 </div>
-
-            </div>
-        </section >
+                )}
+            </section>
+        </Layout >
     )
 }

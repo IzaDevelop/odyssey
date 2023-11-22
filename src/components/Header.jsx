@@ -12,7 +12,7 @@ export function Header() {
     const replacePath = () => {
         var path = location.pathname
 
-        if (path === "/app") {
+        if (path === "/app" || path === "/profile") {
             setApp(true)
         } else {
             setApp(false)

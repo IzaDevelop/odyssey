@@ -30,6 +30,16 @@ export function Nav() {
                     </li>
                     <li>
                         <Link
+                            to={'/app'}
+                            aria-label="App"
+                            title="App"
+                            className="font-medium tracking-wide transition-colors duration-200 "
+                        >
+                            App
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
                             to={'/profile'}
                             aria-label="Perfil"
                             title="Perfil"
@@ -99,6 +109,16 @@ export function Nav() {
                                             className="font-medium tracking-wide transition-colors duration-200 "
                                         >
                                             Home
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            to={'/app'}
+                                            aria-label="App"
+                                            title="App"
+                                            className="font-medium tracking-wide transition-colors duration-200 "
+                                        >
+                                            App
                                         </Link>
                                     </li>
                                     <li>
