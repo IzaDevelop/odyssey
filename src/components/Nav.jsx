@@ -30,7 +30,7 @@ export function Nav() {
                     </li>
                     <li>
                         <Link
-                            to={''}
+                            to={'/profile'}
                             aria-label="Perfil"
                             title="Perfil"
                             className="font-medium tracking-wide transition-colors duration-200 "
@@ -103,7 +103,7 @@ export function Nav() {
                                     </li>
                                     <li>
                                         <Link
-                                            to={''}
+                                            to={'/profile'}
                                             aria-label="Perfil"
                                             title="Perfil"
                                             className="font-medium tracking-wide transition-colors duration-200 "

@@ -5,7 +5,7 @@ import { PublicRoute } from "./PublicRoute";
 import ScrollToTop from "./ScrollToTop";
 
 import { Home } from "../pages/private/Home";
-
+import { Profile } from "../pages/private/Profile";
 import { LP } from "../pages/public/LandingPage";
 import { Register } from "../pages/public/Register";
 
@@ -25,6 +25,7 @@ export function Router() {
 
                     {/* <Route element={<PrivateRoute />}> */}
                         <Route path="/app" element={<Home />} />
+                        <Route path="/profile" element={<Profile />} />
                     {/* </Route> */}
                 </Routes>
                 :
